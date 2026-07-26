@@ -3,21 +3,21 @@ const categories = [
   {
     title: "Tools",
     description:
-      "Tools and equipment I personally use or recommend for repairs, upgrades, diagnostics, and home-server projects.",
+      "Tools and equipment I personally use or recommend for repairs, upgrades, diagnostics, networking, and home-server projects.",
     link: "/tools",
     icon: "🔧",
   },
   {
     title: "Software",
     description:
-      "Step-by-step projects for Jellyfin, Docker, Linux, Windows, networking, automation, and home servers.",
+      "Step-by-step guides for Linux, Windows, Docker, Jellyfin, networking, automation, troubleshooting, and home servers.",
     link: "/software",
     icon: "💻",
   },
   {
     title: "Hardware",
     description:
-      "Repair, upgrade, and troubleshooting guides for desktops, laptops, Steam Decks, storage, RAM, and more.",
+      "Repair, upgrade, and troubleshooting guides for desktops, laptops, storage, RAM, Steam Decks, and other technology.",
     link: "/hardware",
     icon: "🖥️",
   },
@@ -29,19 +29,33 @@ const featuredGuides = [
     category: "Software",
     description:
       "Build a personal media server using Jellyfin, Docker, and Linux.",
+    link: "/software/jellyfin-media-server",
   },
   {
     title: "Upgrade RAM in a Dell Precision 3630",
     category: "Hardware",
     description:
-      "Find compatible RAM, install it safely, and verify the upgrade.",
+      "Find compatible RAM, install it safely, and verify that the upgrade works.",
+    link: "/hardware/dell-precision-3630-ram-upgrade",
   },
   {
     title: "Create a Bootable USB with Ventoy",
     category: "Software",
     description:
-      "Store multiple operating-system and diagnostic images on one USB drive.",
+      "Store multiple operating systems and diagnostic tools on one USB drive.",
+    link: "/software/create-ventoy-usb",
   },
+];
+
+const topics = [
+  "Linux",
+  "Docker",
+  "Jellyfin",
+  "PC repair",
+  "Home servers",
+  "Networking",
+  "Windows",
+  "Steam Deck",
 ];
 ---
 
@@ -50,31 +64,76 @@ const featuredGuides = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+
     <meta
       name="description"
-      content="BekTech offers practical technology tutorials, hardware guides, software projects, and personally recommended tools."
+      content="BEK's Index is a growing library of practical technology guides covering Linux, Docker, Jellyfin, computer repair, hardware upgrades, networking, home servers, and recommended tools."
     />
-    <title>BekTech | Practical Tech Guides</title>
+
+    <meta
+      name="keywords"
+      content="BEK's Index, Linux guides, Docker tutorials, Jellyfin, computer repair, PC hardware, home server, networking, technology guides"
+    />
+
+    <meta name="author" content="BEK" />
+
+    <meta property="og:title" content="BEK's Index" />
+    <meta
+      property="og:description"
+      content="Practical technology guides built from real projects and real troubleshooting."
+    />
+    <meta property="og:type" content="website" />
+
+    <title>BEK's Index | Practical Technology Guides</title>
 
     <style>
       :root {
         font-family:
           Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           sans-serif;
+
         color: #e8edf5;
-        background: #0a0f18;
+        background: #080d15;
+
+        --background: #080d15;
+        --background-soft: #0d1521;
+        --surface: #111b2a;
+        --surface-light: #162338;
+        --border: #283750;
+        --border-hover: #4c84c4;
+        --text: #e8edf5;
+        --text-muted: #a7b3c5;
+        --text-dim: #7f8da2;
+        --accent: #55aaff;
+        --accent-light: #8bc6ff;
+        --accent-dark: #247fda;
+        --max-width: 1120px;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
+        color: var(--text);
         background:
-          radial-gradient(circle at top, #17233a 0, transparent 38rem),
-          #0a0f18;
+          radial-gradient(
+            circle at 50% -10%,
+            rgba(41, 104, 177, 0.28),
+            transparent 34rem
+          ),
+          radial-gradient(
+            circle at 90% 30%,
+            rgba(31, 81, 143, 0.12),
+            transparent 30rem
+          ),
+          var(--background);
       }
 
       a {
@@ -82,206 +141,455 @@ const featuredGuides = [
         text-decoration: none;
       }
 
+      button,
+      input {
+        font: inherit;
+      }
+
       header {
-        border-bottom: 1px solid #263247;
-        background: rgba(10, 15, 24, 0.9);
         position: sticky;
         top: 0;
-        z-index: 10;
-        backdrop-filter: blur(12px);
+        z-index: 100;
+        border-bottom: 1px solid rgba(40, 55, 80, 0.82);
+        background: rgba(8, 13, 21, 0.88);
+        backdrop-filter: blur(16px);
       }
 
       nav {
-        width: min(1120px, calc(100% - 32px));
+        width: min(var(--max-width), calc(100% - 32px));
+        min-height: 74px;
         margin: auto;
-        min-height: 72px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 24px;
+        gap: 28px;
       }
 
       .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
         font-size: 1.45rem;
-        font-weight: 800;
-        letter-spacing: -0.04em;
+        font-weight: 850;
+        letter-spacing: -0.05em;
+        white-space: nowrap;
       }
 
-      .logo span {
-        color: #54a7ff;
+      .logo-mark {
+        color: var(--text);
+      }
+
+      .logo-index {
+        color: var(--accent);
       }
 
       .nav-links {
         display: flex;
-        gap: 24px;
-        color: #b8c2d1;
-        font-weight: 600;
+        align-items: center;
+        gap: 26px;
+        color: #b8c3d3;
+        font-size: 0.94rem;
+        font-weight: 650;
+      }
+
+      .nav-links a {
+        transition: color 150ms ease;
       }
 
       .nav-links a:hover {
         color: white;
       }
 
+      .nav-button {
+        padding: 10px 16px;
+        border: 1px solid #396da6;
+        border-radius: 10px;
+        color: #ddecff;
+        background: rgba(54, 143, 233, 0.12);
+      }
+
+      .nav-button:hover {
+        color: white !important;
+        background: rgba(54, 143, 233, 0.22);
+      }
+
       main {
-        width: min(1120px, calc(100% - 32px));
+        width: min(var(--max-width), calc(100% - 32px));
         margin: auto;
       }
 
       .hero {
-        padding: 110px 0 80px;
+        padding: 118px 0 90px;
         text-align: center;
       }
 
       .eyebrow {
-        color: #7abaff;
-        font-size: 0.85rem;
-        font-weight: 800;
-        letter-spacing: 0.16em;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 18px;
+        color: var(--accent-light);
+        font-size: 0.78rem;
+        font-weight: 850;
+        letter-spacing: 0.17em;
         text-transform: uppercase;
       }
 
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 16px rgba(85, 170, 255, 0.85);
+      }
+
       h1 {
-        margin: 14px auto 20px;
-        max-width: 850px;
-        font-size: clamp(2.7rem, 8vw, 5.5rem);
-        line-height: 0.98;
-        letter-spacing: -0.065em;
+        max-width: 900px;
+        margin: 0 auto 24px;
+        font-size: clamp(3.25rem, 8vw, 6.1rem);
+        line-height: 0.94;
+        letter-spacing: -0.075em;
+      }
+
+      .hero-accent {
+        color: var(--accent);
       }
 
       .hero-description {
-        max-width: 710px;
+        max-width: 745px;
         margin: auto;
-        color: #acb7c7;
-        font-size: 1.12rem;
-        line-height: 1.7;
+        color: var(--text-muted);
+        font-size: clamp(1rem, 2vw, 1.16rem);
+        line-height: 1.75;
       }
 
       .search-form {
-        max-width: 720px;
-        margin: 38px auto 0;
+        max-width: 760px;
+        margin: 42px auto 0;
         padding: 8px;
         display: flex;
         gap: 8px;
-        border: 1px solid #33415a;
-        border-radius: 16px;
-        background: #111927;
-        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.3);
+        border: 1px solid #34445f;
+        border-radius: 17px;
+        background: rgba(17, 27, 42, 0.94);
+        box-shadow:
+          0 25px 80px rgba(0, 0, 0, 0.32),
+          inset 0 1px rgba(255, 255, 255, 0.03);
+      }
+
+      .search-form:focus-within {
+        border-color: #4c8dd3;
+        box-shadow:
+          0 25px 80px rgba(0, 0, 0, 0.32),
+          0 0 0 3px rgba(54, 143, 233, 0.12);
       }
 
       .search-form input {
         flex: 1;
         min-width: 0;
+        padding: 16px 17px;
         border: 0;
         outline: 0;
-        padding: 15px 16px;
         color: white;
         background: transparent;
-        font: inherit;
+      }
+
+      .search-form input::placeholder {
+        color: #7f8ca0;
       }
 
       .search-form button {
+        padding: 0 26px;
         border: 0;
         border-radius: 11px;
-        padding: 0 24px;
-        background: #368fe9;
         color: white;
-        font: inherit;
+        background: linear-gradient(135deg, #409df5, #247ed7);
         font-weight: 800;
         cursor: pointer;
+        transition:
+          transform 150ms ease,
+          filter 150ms ease;
+      }
+
+      .search-form button:hover {
+        filter: brightness(1.08);
+      }
+
+      .search-form button:active {
+        transform: scale(0.98);
+      }
+
+      .topic-list {
+        max-width: 820px;
+        margin: 24px auto 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 9px;
+      }
+
+      .topic {
+        padding: 7px 11px;
+        border: 1px solid #26364e;
+        border-radius: 999px;
+        color: #91a0b5;
+        background: rgba(16, 25, 39, 0.72);
+        font-size: 0.78rem;
       }
 
       section {
-        padding: 42px 0 80px;
+        padding: 50px 0 88px;
       }
 
       .section-heading {
-        margin-bottom: 26px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
       }
 
       .section-heading h2 {
-        margin: 0 0 8px;
-        font-size: 2rem;
-        letter-spacing: -0.04em;
+        margin: 0 0 9px;
+        font-size: clamp(1.8rem, 4vw, 2.35rem);
+        letter-spacing: -0.05em;
       }
 
       .section-heading p {
+        max-width: 620px;
         margin: 0;
-        color: #9eaabd;
+        color: var(--text-muted);
+        line-height: 1.65;
+      }
+
+      .section-link {
+        flex-shrink: 0;
+        color: var(--accent-light);
+        font-size: 0.92rem;
+        font-weight: 750;
+      }
+
+      .section-link:hover {
+        color: white;
       }
 
       .category-grid,
       .guide-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 20px;
       }
 
       .card {
-        border: 1px solid #27344a;
-        border-radius: 18px;
-        background: linear-gradient(145deg, #131d2d, #0e1521);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background:
+          linear-gradient(
+            145deg,
+            rgba(21, 33, 51, 0.96),
+            rgba(12, 20, 31, 0.96)
+          );
+        box-shadow: 0 14px 45px rgba(0, 0, 0, 0.15);
         transition:
-          transform 160ms ease,
-          border-color 160ms ease;
+          transform 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          130deg,
+          rgba(85, 170, 255, 0.07),
+          transparent 45%
+        );
+        opacity: 0;
+        transition: opacity 180ms ease;
       }
 
       .card:hover {
-        transform: translateY(-4px);
-        border-color: #4d83bd;
+        transform: translateY(-5px);
+        border-color: var(--border-hover);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.27);
+      }
+
+      .card:hover::before {
+        opacity: 1;
       }
 
       .category-card {
-        padding: 28px;
+        min-height: 290px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
       }
 
       .category-icon {
-        font-size: 2rem;
+        width: 54px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #314665;
+        border-radius: 15px;
+        background: rgba(62, 136, 216, 0.1);
+        font-size: 1.7rem;
       }
 
       .card h3 {
-        margin: 18px 0 10px;
-        font-size: 1.3rem;
+        margin: 20px 0 11px;
+        font-size: 1.32rem;
+        letter-spacing: -0.025em;
       }
 
       .card p {
         margin: 0;
-        color: #aab5c5;
-        line-height: 1.65;
+        color: var(--text-muted);
+        line-height: 1.68;
       }
 
       .card-link {
+        position: relative;
+        z-index: 1;
         display: inline-block;
-        margin-top: 22px;
-        color: #70b5ff;
+        margin-top: auto;
+        padding-top: 23px;
+        color: var(--accent-light);
         font-weight: 800;
       }
 
       .guide-card {
-        padding: 24px;
+        min-height: 260px;
+        padding: 26px;
+        display: flex;
+        flex-direction: column;
       }
 
       .guide-category {
+        align-self: flex-start;
         display: inline-block;
-        padding: 6px 10px;
+        padding: 7px 11px;
+        border: 1px solid rgba(74, 143, 215, 0.22);
         border-radius: 999px;
-        color: #91c7ff;
-        background: #172d47;
-        font-size: 0.76rem;
-        font-weight: 800;
+        color: #99ceff;
+        background: rgba(34, 84, 135, 0.3);
+        font-size: 0.72rem;
+        font-weight: 850;
+        letter-spacing: 0.09em;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+      }
+
+      .mission {
+        padding: 75px 0;
+      }
+
+      .mission-panel {
+        padding: clamp(30px, 6vw, 58px);
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 46px;
+        align-items: center;
+        border: 1px solid #2e405b;
+        border-radius: 24px;
+        background:
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(51, 132, 220, 0.19),
+            transparent 18rem
+          ),
+          linear-gradient(145deg, #111d2d, #0c141f);
+      }
+
+      .mission-label {
+        margin-bottom: 13px;
+        color: var(--accent-light);
+        font-size: 0.78rem;
+        font-weight: 850;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .mission h2 {
+        margin: 0 0 18px;
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        line-height: 1.05;
+        letter-spacing: -0.06em;
+      }
+
+      .mission p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.75;
+      }
+
+      .mission-points {
+        display: grid;
+        gap: 12px;
+      }
+
+      .mission-point {
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid #2b3b53;
+        border-radius: 13px;
+        color: #c5d0df;
+        background: rgba(8, 14, 23, 0.52);
+        font-weight: 650;
+      }
+
+      .check {
+        color: var(--accent);
+        font-weight: 900;
       }
 
       footer {
-        border-top: 1px solid #263247;
-        padding: 30px 16px;
-        text-align: center;
-        color: #8794a7;
+        margin-top: 30px;
+        border-top: 1px solid #25334a;
+        color: var(--text-dim);
       }
 
-      @media (max-width: 800px) {
+      .footer-inner {
+        width: min(var(--max-width), calc(100% - 32px));
+        min-height: 110px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .footer-brand {
+        color: #aeb9c9;
+      }
+
+      .footer-brand strong {
+        color: white;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      @media (max-width: 850px) {
         .category-grid,
         .guide-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .mission-panel {
           grid-template-columns: 1fr;
         }
 
@@ -290,17 +598,49 @@ const featuredGuides = [
         }
 
         .hero {
-          padding-top: 80px;
+          padding-top: 88px;
+        }
+
+        .section-heading {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .category-card,
+        .guide-card {
+          min-height: auto;
         }
       }
 
-      @media (max-width: 520px) {
+      @media (max-width: 560px) {
+        nav {
+          min-height: 66px;
+        }
+
+        .hero {
+          padding: 74px 0 62px;
+        }
+
+        h1 {
+          font-size: clamp(3rem, 16vw, 4.4rem);
+        }
+
         .search-form {
           flex-direction: column;
         }
 
         .search-form button {
-          padding: 14px;
+          padding: 15px;
+        }
+
+        section {
+          padding-bottom: 65px;
+        }
+
+        .footer-inner {
+          padding: 28px 0;
+          align-items: flex-start;
+          flex-direction: column;
         }
       }
     </style>
@@ -308,8 +648,11 @@ const featuredGuides = [
 
   <body>
     <header>
-      <nav>
-        <a class="logo" href="/">Bek<span>Tech</span></a>
+      <nav aria-label="Main navigation">
+        <a class="logo" href="/" aria-label="BEK's Index home">
+          <span class="logo-mark">BEK's</span>
+          <span class="logo-index">Index</span>
+        </a>
 
         <div class="nav-links">
           <a href="/">Home</a>
@@ -317,46 +660,73 @@ const featuredGuides = [
           <a href="/software">Software</a>
           <a href="/hardware">Hardware</a>
           <a href="/about">About</a>
+          <a class="nav-button" href="/guides">All Guides</a>
         </div>
       </nav>
     </header>
 
     <main>
       <section class="hero">
-        <div class="eyebrow">Practical technology made easier</div>
+        <div class="eyebrow">Practical technology knowledge</div>
 
-        <h1>Build it, repair it, and understand it.</h1>
+        <h1>
+          Learn it. Build it.
+          <span class="hero-accent">Fix it.</span>
+        </h1>
 
         <p class="hero-description">
-          Search practical guides for computer repairs, hardware upgrades,
-          software projects, home servers, and tools I personally recommend.
+          BEK's Index is a growing library of practical technology guides built
+          from real projects, real repairs, and real troubleshooting. Find
+          clear instructions for Linux, Docker, home servers, hardware,
+          networking, software, and the tools I actually use.
         </p>
 
-        <form class="search-form" action="/search">
+        <form class="search-form" action="/search" method="get">
           <input
             type="search"
             name="q"
-            placeholder="Search Jellyfin, Dell 3630, Steam Deck..."
-            aria-label="Search BekTech"
+            placeholder="Search Linux, Jellyfin, Dell 3630, Ventoy..."
+            aria-label="Search BEK's Index"
           />
-          <button type="submit">Search</button>
+          <button type="submit">Search the Index</button>
         </form>
+
+        <div class="topic-list" aria-label="Popular topics">
+          {
+            topics.map((topic) => (
+              <span class="topic">{topic}</span>
+            ))
+          }
+        </div>
       </section>
 
       <section>
         <div class="section-heading">
-          <h2>Explore BekTech</h2>
-          <p>Choose a category to start finding guides and recommendations.</p>
+          <div>
+            <h2>Browse the Index</h2>
+            <p>
+              Explore practical tutorials, repair information, project guides,
+              and recommendations organized by category.
+            </p>
+          </div>
+
+          <a class="section-link" href="/guides">View all guides →</a>
         </div>
 
         <div class="category-grid">
           {
             categories.map((category) => (
               <a class="card category-card" href={category.link}>
-                <div class="category-icon">{category.icon}</div>
+                <div class="category-icon" aria-hidden="true">
+                  {category.icon}
+                </div>
+
                 <h3>{category.title}</h3>
                 <p>{category.description}</p>
-                <span class="card-link">Explore {category.title} →</span>
+
+                <span class="card-link">
+                  Explore {category.title} →
+                </span>
               </a>
             ))
           }
@@ -365,8 +735,15 @@ const featuredGuides = [
 
       <section>
         <div class="section-heading">
-          <h2>Featured guides</h2>
-          <p>These placeholders will eventually become your real tutorials.</p>
+          <div>
+            <h2>Featured guides</h2>
+            <p>
+              A selection of practical tutorials and projects planned for
+              BEK's Index.
+            </p>
+          </div>
+
+          <a class="section-link" href="/guides">Browse everything →</a>
         </div>
 
         <div class="guide-grid">
@@ -376,16 +753,69 @@ const featuredGuides = [
                 <span class="guide-category">{guide.category}</span>
                 <h3>{guide.title}</h3>
                 <p>{guide.description}</p>
-                <a class="card-link" href="#">Read guide →</a>
+                <a class="card-link" href={guide.link}>
+                  Read guide →
+                </a>
               </article>
             ))
           }
         </div>
       </section>
+
+      <section class="mission">
+        <div class="mission-panel">
+          <div>
+            <div class="mission-label">What BEK's Index is about</div>
+
+            <h2>Useful answers without the unnecessary nonsense.</h2>
+
+            <p>
+              Technology guides should be clear, honest, and based on
+              experience. BEK's Index documents the complete process: what
+              worked, what failed, which tools were useful, and what you should
+              know before starting.
+            </p>
+          </div>
+
+          <div class="mission-points">
+            <div class="mission-point">
+              <span class="check">✓</span>
+              Tested through real projects
+            </div>
+
+            <div class="mission-point">
+              <span class="check">✓</span>
+              Written for normal people
+            </div>
+
+            <div class="mission-point">
+              <span class="check">✓</span>
+              Mistakes and fixes included
+            </div>
+
+            <div class="mission-point">
+              <span class="check">✓</span>
+              No filler added for search engines
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
-      <strong>BekTech</strong> — Practical guides based on real projects.
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <strong>BEK's Index</strong><br />
+          Practical technology knowledge built from real experience.
+        </div>
+
+        <div class="footer-links">
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy</a>
+          <a href="https://github.com/beksindex">GitHub</a>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
